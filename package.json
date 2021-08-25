@@ -1,0 +1,29 @@
+{
+  "name": "book-store",
+  "version": "1.0.0",
+  "description": "This is a book store using file system",
+  "main": "index.js",
+  "scripts": {
+    "devStart": "nodemon index.js",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GauravPunani/Book-Store.git"
+  },
+  "author": "Gourav Punani",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GauravPunani/Book-Store/issues"
+  },
+  "homepage": "https://github.com/GauravPunani/Book-Store#readme",
+  "dependencies": {
+    "dotenv": "^10.0.0",
+    "ejs": "^3.1.6",
+    "express": "^4.17.1",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.12"
+  }
+}
