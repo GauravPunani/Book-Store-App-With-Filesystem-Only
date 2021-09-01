@@ -1,0 +1,66 @@
+<%- include('../header') %>
+
+<div class="container booksContainer">
+    <% if (book) { %>
+        <form id="bookEditForm" action="/books" method="PUT">
+
+            <input type="hidden" name="id" value="<%- book.id  %>">
+
+            <div class="form-group">
+                <label for="">Title</label>
+                <input id="title" type="text" class="form-control" name="title" value="<%- book.title %> " required>
+            </div>
+            <div class="form-group">
+                <label for="">Author</label>
+                <input id="author" type="text" class="form-control" name="author" value="<%- book.author %> " required>
+            </div>
+            <div class="form-group">
+                <label for="">Year</label>
+                <input id="year" type="text" class="form-control" name="year" value="<%- book.year %> " required>
+            </div>
+            <div class="form-group">
+                <label for="">Description</label>
+                <textarea id="description" name="description" cols="30" rows="10" class="form-control" required><%- book.description; %></textarea>
+            </div>
+            <button class="btn"><span><i class="fa fa-edit"></i></span> Update</button>
+        </form>
+    <% } else{ %>
+        <p>No Book Found</p>
+    <% } %> 
+</div>
+
+<script>
+    const form = document.getElementById('bookEditForm');
+
+    form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        let formData = new FormData(form);
+        let formObj = {};
+
+        formData.forEach(function(value, key){
+            formObj[key] = value;
+        });        
+
+        const options = {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body:JSON.stringify(formObj)
+        };
+
+        const response = await fetch('/api/books', options);
+        const data = await response.json();
+        if(data.status === "success"){
+            alert('Form Updated Successfully');
+            window.location.href = '/';
+        }
+        else{
+            alert('Something went wrong, please try again later');
+        }
+
+    })
+
+</script>
+<% include('../footer') %>

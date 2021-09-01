@@ -3,13 +3,21 @@ const fs = require('fs');
 const Joi = require('joi');
 const booksPath = '../database/books.json';
 const path = require('path');
-const { getBooks, createBook, getBook, addBook, deleteBook, updateBook } = require('../Controllers/books');
+const { getBooks, createBook, getBook, addBook, deleteBook, updateBook, serachBook } = require('../Controllers/books');
 const {createBookSchema, updateBookSchema} = require('../validationSchemas/books');
+
+
 
 const router = express.Router();
 
 router.get('/', async (req, res) => {
     const books = await getBooks();
+    res.json(books);
+});
+
+router.get('/search/:searchkeyword', async (req,res) => {
+    const searchKeyword = req.params.searchkeyword;
+    const books = await serachBook(searchKeyword);
     res.json(books);
 });
 
@@ -31,7 +39,7 @@ router.post('/', async (req, res) => {
     if(error){
         res.sendStatus(422).json({
             message: "invalid request",
-            data: error 
+            status: "error",
         })
     }
     else{
@@ -40,9 +48,9 @@ router.post('/', async (req, res) => {
         if(bookData){
             res.status(201);
             res.json({
-                message: "success",
-                data: bookData
-            })
+                status: "success",
+                messaage: "Book Created Successfully"
+            });
         }
         else{
             res.sendStatus(500).json({
@@ -60,20 +68,21 @@ router.put('/', async (req, res) => {
     const {value, error} = validationResults;
 
     if(error){
-        return res.sendStatus(422).json({
+        res.status(422);
+        res.json({
+            status: "error",
             message: "invalid request",
-            data: error 
-        })
+        });
     }
     else{
         const bookData = await updateBook(body);
 
         if(bookData){
-
+            await req.flash('success', 'Book updated successfully');
             res.status(200);
             res.json({
                 message: "book updated successfully",
-                data: bookData
+                status: "success",
             });
         }
         else{
@@ -90,12 +99,18 @@ router.delete('/:id', async (req, res) => {
     const response = await deleteBook(bookId);
 
     if(response){
-        res.sendStatus(200);
-        res.send('file deleted successfully');
+        res.status(200);
+        res.json({
+            status: "success",
+            message: "book deleted"
+        });
     }
     else{
-        res.sendStatus(400);
-        res.send('no book found');
+        res.status(400);
+        res.json({
+            status: 'error',
+            message: 'No book found'
+        })
     }
 
 });

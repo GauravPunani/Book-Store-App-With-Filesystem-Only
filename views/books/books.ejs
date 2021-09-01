@@ -1,29 +1,12 @@
 <%- include('../header') %>
+<script defer src="/js/books.js"></script>
+
 <div class="container booksContainer">
-    <div class="booksContainer__searchbox">
-        <input type="text" name="search" id="" placeholder="Search book...">
-    </div>
-    <div class="booksContainer__listing">
-        <table class="table table-striped table-hover">
-            <thead>
-                <tr>
-                    <th>Title</th>
-                    <th>Author</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                <% books.forEach(function(book){ %>
-                    <tr>
-                        <td><%- book.title %> </td>
-                        <td><%- book.author %> </td>
-                        <td><%- book.year %> </td>
-                    </tr>
-                <% }) %>
-            </tbody>
-        </table>
-    </div>
+
+    <input type="text" name="search" id="booksContainer__searchBox" class="booksContainer__searchBox" placeholder="Search by title, author...">
+    <a class="btn" href="/books/create"><span><i class="fa fa-plus"></i></span> Create Book</a>
+    <h3 class="text-center">Books</h3>
+    <div id="booksContainer__tableListingContainer"></div>
 </div>
-<% console.log(books) %>
 
 <% include('../footer') %>

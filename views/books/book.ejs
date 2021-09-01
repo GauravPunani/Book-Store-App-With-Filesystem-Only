@@ -1,0 +1,49 @@
+<%- include('../header') %>
+
+<div class="container booksContainer">
+    <% if(book){ %>
+        <div class="booksContainer__titleBox">
+            <h3><%- book.title %> by </h3>
+            <div class="bookContainer__actionBtns">
+                <button onclick="editBook('<%- book.id %>')" class="btn"><span><i class="fa fa-edit"></i></span> Edit</button>
+                <button onclick="deleteBook('<%- book.id %>')" class="btn"><span><i class="fa fa-trash"></i></span> Delete</button>
+            </div>
+        </div>
+        <p>Author: <%- book.author %></p>
+        <p>Published in : <%- book.year %> </p>
+        <p><b>Description</b></p>
+        <p><%- book.description %> </p>
+    <% } else{ %> 
+        <p>No Book Found</p>
+    <% } %> 
+
+</div>
+
+<script>
+    function editBook(bookId){
+        const url = `/books/${bookId}/edit`;
+        window.location.href = url;
+    }
+
+    async function deleteBook(bookId){
+        if(confirm('Are you sure you want to delele this book ?')){
+
+            const url = `/api/books/${bookId}`;
+            const options = {
+                method: "DELETE",
+            }
+            const response = await fetch(url, options);
+            const data = await response.json();
+            console.log(data);
+            if(data.status === "success"){
+                alert('Form Updated Successfully');
+                window.location.href = '/';
+            }
+            else{
+                alert('Something went wrong, please try again later');
+            }
+        }
+    }
+</script>
+
+<% include('../footer') %>

@@ -6,9 +6,28 @@ const { v4: uuidv4 } = require('uuid');
 
 const getBooks = async () => {
     const booksFile = await fs.readFileSync(booksPath);
-    const booksString = booksFile.toString()
+    const booksString = booksFile.toString();
     const booksObject = JSON.parse(booksString);
     return booksObject;
+}
+
+const getBookById = async (bookId) => {
+    const books = await getBooks();
+    const id = books.findIndex( book => book.id === bookId);
+    return books[id];
+}
+
+const serachBook = async (searchKeyword) => {
+    const books = await getBooks();
+    searchKeyword = searchKeyword.toLowerCase();
+
+    const searchedBooks = books.filter( (book) => {
+
+        if(book.title.toLowerCase().indexOf(searchKeyword) !== -1) return true;
+        if(book.author.toLowerCase().indexOf(searchKeyword) !== -1) return true;
+    });
+
+    return searchedBooks;
 }
 
 const getBook = async (bookId) => {
@@ -72,6 +91,8 @@ const updateBook = async (bookData) => {
         
         // update the book with new data
         books[bookIndex] = bookData;
+        console.log(books);
+
         const bookString = JSON.stringify(books);
 
         // update the books database
@@ -111,5 +132,7 @@ module.exports = {
     addBook,
     deleteBook,
     updateBook,
-    createBook
+    createBook,
+    serachBook,
+    getBookById
 }
